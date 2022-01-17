@@ -26,6 +26,22 @@ export const currenciesApi=functions.https.onRequest((request,response)=>{
 })
 */
 
+export const testPostingToFunction = functions.https.onRequest((request,response)=>{
+  if(request.body.firebaseAPIKey.toString()!="1349b396-06ce-45f5-81e1-9042ce8218dc"){
+    response.status(401).send("Unautherized")
+  }else{
+    admin.firestore().collection("Currencies").doc("data").set(request.body).then(writeResult=>{
+      console.log(request.body)
+      response.status(200).send("Update was successful!")
+    }).catch(error=>{
+      console.log(error)
+      console.log(request.body)
+      response.status(500).send("Update was NOT successful!")
+    })
+   
+  }
+ 
+})
 
 
  export const clientPendingTimeStamping=functions.firestore.document('/Shops/{ShopOwnerUid}/ClientsPending/{ClientUid}')
